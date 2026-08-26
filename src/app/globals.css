@@ -1,0 +1,232 @@
+@import "tailwindcss";
+
+:root {
+  /* Google Pixel Blue — HR Mode palette */
+  --background: #f8faff;
+  --foreground: #0d1b2a;
+  --muted: #5a6a7e;
+  --border: #dce6f5;
+  --accent: #1a73e8;
+  --accent-soft: #e8f0fe;
+  --accent-mid: #4285f4;
+  --surface: #ffffff;
+  --surface-alt: #f0f4ff;
+  --ink-light: #8ca0b8;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-geist-sans), system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+.font-mono {
+  font-family: var(--font-geist-mono), "Courier New", monospace;
+}
+
+/* ── HR Background: Pixel blue subtle grid ───────────────── */
+.hr-bg {
+  background-color: var(--background);
+  background-image: radial-gradient(circle, #c2d3f0 1px, transparent 1px);
+  background-size: 32px 32px;
+}
+
+.hr-bg-alt {
+  background-color: var(--surface-alt);
+  background-image: radial-gradient(circle, #bdd0ef 1px, transparent 1px);
+  background-size: 32px 32px;
+}
+
+.hr-surface {
+  background-color: var(--surface);
+}
+
+/* ── Fade-up entrance ────────────────────────────────────── */
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+    filter: blur(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+    filter: blur(0);
+  }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@keyframes lineGrow {
+  from { width: 0; }
+  to   { width: 100%; }
+}
+
+@keyframes scaleIn {
+  from { opacity: 0; transform: scale(0.96); }
+  to   { opacity: 1; transform: scale(1); }
+}
+
+.animate-fade-up {
+  animation: fadeUp 0.8s cubic-bezier(0.32, 0.72, 0, 1) both;
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.6s cubic-bezier(0.32, 0.72, 0, 1) both;
+}
+
+.animate-scale-in {
+  animation: scaleIn 0.7s cubic-bezier(0.32, 0.72, 0, 1) both;
+}
+
+.animate-line {
+  animation: lineGrow 0.9s cubic-bezier(0.32, 0.72, 0, 1) 0.4s both;
+}
+
+/* Stagger delays */
+.anim-delay-100 { animation-delay: 0.1s; }
+.anim-delay-200 { animation-delay: 0.2s; }
+.anim-delay-300 { animation-delay: 0.3s; }
+.anim-delay-400 { animation-delay: 0.4s; }
+.anim-delay-500 { animation-delay: 0.5s; }
+.anim-delay-600 { animation-delay: 0.6s; }
+.anim-delay-700 { animation-delay: 0.7s; }
+
+/* ── Scroll reveal (JS adds .revealed) ──────────────────── */
+.reveal {
+  opacity: 0;
+  transform: translateY(20px);
+  filter: blur(3px);
+  transition: opacity 0.7s cubic-bezier(0.32, 0.72, 0, 1),
+              transform 0.7s cubic-bezier(0.32, 0.72, 0, 1),
+              filter 0.7s cubic-bezier(0.32, 0.72, 0, 1);
+}
+
+.reveal.revealed {
+  opacity: 1;
+  transform: translateY(0);
+  filter: blur(0);
+}
+
+/* Stagger for reveal children */
+.reveal-stagger > * {
+  opacity: 0;
+  transform: translateY(16px);
+  filter: blur(2px);
+  transition: opacity 0.6s cubic-bezier(0.32, 0.72, 0, 1),
+              transform 0.6s cubic-bezier(0.32, 0.72, 0, 1),
+              filter 0.6s cubic-bezier(0.32, 0.72, 0, 1);
+}
+
+.reveal-stagger.revealed > *:nth-child(1) { opacity: 1; transform: none; filter: blur(0); transition-delay: 0s; }
+.reveal-stagger.revealed > *:nth-child(2) { opacity: 1; transform: none; filter: blur(0); transition-delay: 0.08s; }
+.reveal-stagger.revealed > *:nth-child(3) { opacity: 1; transform: none; filter: blur(0); transition-delay: 0.16s; }
+.reveal-stagger.revealed > *:nth-child(4) { opacity: 1; transform: none; filter: blur(0); transition-delay: 0.24s; }
+.reveal-stagger.revealed > *:nth-child(5) { opacity: 1; transform: none; filter: blur(0); transition-delay: 0.32s; }
+.reveal-stagger.revealed > *:nth-child(6) { opacity: 1; transform: none; filter: blur(0); transition-delay: 0.40s; }
+.reveal-stagger.revealed > *:nth-child(7) { opacity: 1; transform: none; filter: blur(0); transition-delay: 0.48s; }
+
+/* ── Vertical marquee ────────────────────────────────────── */
+@keyframes marqueeUp {
+  from { transform: translateY(0); }
+  to   { transform: translateY(-50%); }
+}
+
+.marquee-track {
+  animation: marqueeUp 28s linear infinite;
+}
+
+.marquee-track:hover {
+  animation-play-state: paused;
+}
+
+/* ── CTA primary — Pixel pill button ────────────────────── */
+.cta-primary {
+  position: relative;
+  overflow: hidden;
+  border-radius: 9999px;
+  transition: transform 0.3s cubic-bezier(0.32, 0.72, 0, 1),
+              box-shadow 0.3s cubic-bezier(0.32, 0.72, 0, 1);
+}
+
+.cta-primary:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 8px 24px rgba(26, 115, 232, 0.25);
+}
+
+.cta-primary:active {
+  transform: scale(0.98);
+}
+
+.cta-primary::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(255,255,255,0.1);
+  opacity: 0;
+  transition: opacity 0.2s;
+  border-radius: inherit;
+}
+
+.cta-primary:hover::after {
+  opacity: 1;
+}
+
+/* ── Double-bezel card ───────────────────────────────────── */
+.pixel-card {
+  background: rgba(255,255,255,0.9);
+  border: 1px solid rgba(26,115,232,0.1);
+  border-radius: 1.25rem;
+  box-shadow: 0 1px 2px rgba(13,27,42,0.04),
+              0 4px 16px rgba(13,27,42,0.06),
+              inset 0 1px 1px rgba(255,255,255,0.8);
+  transition: transform 0.4s cubic-bezier(0.32, 0.72, 0, 1),
+              box-shadow 0.4s cubic-bezier(0.32, 0.72, 0, 1);
+}
+
+.pixel-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 2px 4px rgba(13,27,42,0.04),
+              0 12px 32px rgba(26,115,232,0.12),
+              inset 0 1px 1px rgba(255,255,255,0.8);
+}
+
+/* ── Eyebrow pill tag ────────────────────────────────────── */
+.eyebrow-tag {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 12px;
+  border-radius: 9999px;
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  background: var(--accent-soft);
+  color: var(--accent);
+  border: 1px solid rgba(26,115,232,0.15);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-fade-up,
+  .animate-fade-in,
+  .animate-scale-in,
+  .animate-line,
+  .reveal,
+  .reveal-stagger > *,
+  .marquee-track {
+    animation: none !important;
+    transition: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+    filter: none !important;
+    width: auto !important;
+  }
+}
