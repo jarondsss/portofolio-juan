@@ -69,21 +69,33 @@ const hrSkillGroups = [
 const projects = [
   {
     name: "personal-hr",
-    desc: "Full-stack HR management app — attendance, payroll, employee data. Built with Next.js, Prisma, TypeScript.",
+    desc: "Full-stack HR management app — attendance, payroll, employee data.",
     tech: ["Next.js", "TypeScript", "Prisma", "Tailwind", "SQLite"],
     url: "https://personal-hr-henna.vercel.app/",
   },
   {
     name: "logileap",
-    desc: "Logistics management app.",
-    tech: [],
+    desc: "Logistics tracking app with AI integration, maps, and real-time data visualization.",
+    tech: ["Next.js", "TypeScript", "Prisma", "Tailwind", "Supabase", "OpenAI", "Recharts", "Leaflet"],
     url: "https://logileap.vercel.app/",
   },
   {
     name: "mastermove-landing",
     desc: "Landing page for Mastermove Indonesia.",
-    tech: [],
+    tech: ["Next.js", "TypeScript", "Tailwind", "Framer Motion"],
     url: "https://www.mastermoveindonesia.com/",
+  },
+  {
+    name: "alokasi",
+    desc: "Mobile-ready budget & cash book app with charts and animations.",
+    tech: ["React", "Vite", "Capacitor", "Recharts", "Framer Motion"],
+    url: "#",
+  },
+  {
+    name: "driving-app",
+    desc: "Native Android driver mode app with voice selection and batch message support.",
+    tech: ["Android", "Kotlin", "Gradle"],
+    url: "#",
   },
 ];
 
@@ -289,32 +301,5 @@ export default function ContentSection() {
     );
   }
 
-  return (
-    <section id="projects" className="bg-black py-24 px-6 font-mono">
-      <div className="max-w-4xl mx-auto">
-        <h2 className="text-3xl font-bold text-green-400 mb-12 text-center">&gt; ls projects/</h2>
-        <div className="grid md:grid-cols-2 gap-6">
-          {projects.map((proj) => (
-            <a
-              key={proj.name}
-              href={proj.url}
-              className="border border-green-900 rounded-lg p-6 hover:border-green-400 transition group"
-            >
-              <h3 className="text-green-400 font-bold text-lg mb-2 group-hover:text-white transition">
-                ./{proj.name}
-              </h3>
-              <p className="text-green-700 text-sm mb-4">{proj.desc}</p>
-              <div className="flex flex-wrap gap-2">
-                {proj.tech.map((t) => (
-                  <span key={t} className="text-xs border border-green-800 text-green-600 px-2 py-1 rounded">
-                    {t}
-                  </span>
-                ))}
-              </div>
-            </a>
-          ))}
-        </div>
-      </div>
-    </section>
-  );
+  return null;
 }
