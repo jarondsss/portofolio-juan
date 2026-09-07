@@ -105,19 +105,111 @@ export default function ContactSection() {
   }
 
   return (
-    <section id="contact" ref={ref as React.RefObject<HTMLElement>} className="bg-black py-24 px-6 text-center font-mono">
-      <div className="max-w-xl mx-auto">
-        <h2 className="text-3xl font-bold text-green-400 mb-4">&gt; contact --me</h2>
-        <p className="text-green-700 mb-8">Hit me up. Let&apos;s build something cool.</p>
-        <div className="flex justify-center gap-4 flex-wrap">
-          <a href="https://github.com/jarondsss" target="_blank" rel="noopener noreferrer" className="px-6 py-3 bg-green-400 text-black rounded-full hover:bg-green-300 transition font-bold">
-            GitHub
-          </a>
-          <a href="mailto:anjurondali@gmail.com" className="px-6 py-3 border border-green-400 text-green-400 rounded-full hover:bg-green-400 hover:text-black transition">
-            Email
-          </a>
-        </div>
+    <section
+      id="contact"
+      style={{ background: "#0a0a0a", fontFamily: "var(--font-geist-mono), monospace" }}
+    >
+      {/* Section header */}
+      <div
+        className="px-6 md:px-16 py-10 border-b"
+        style={{ borderColor: "#1a1a1a" }}
+      >
+        <motion.div
+          variants={stagger}
+          initial="hidden"
+          whileInView="show"
+          viewport={{ once: true, margin: "-80px" }}
+        >
+          <motion.span
+            variants={fadeUp}
+            style={{ color: "#e61919", fontSize: "10px", letterSpacing: "0.18em", textTransform: "uppercase", display: "block" }}
+          >
+            // CONNECT
+          </motion.span>
+          <motion.h2
+            variants={fadeUp}
+            style={{
+              fontSize: "clamp(2.5rem, 6vw, 5rem)",
+              fontWeight: 900,
+              lineHeight: 0.9,
+              letterSpacing: "-0.03em",
+              textTransform: "uppercase",
+              color: "#eaeaea",
+              marginTop: "12px",
+            }}
+          >
+            OPEN TO
+            <br />
+            <span style={{ color: "#e61919" }}>COLLABORATION</span>
+          </motion.h2>
+        </motion.div>
       </div>
+
+      {/* Contact links */}
+      <motion.div
+        variants={stagger}
+        initial="hidden"
+        whileInView="show"
+        viewport={{ once: true, margin: "-60px" }}
+        className="px-6 md:px-16"
+      >
+        {/* Column header */}
+        <div
+          className="flex items-center gap-8 py-3 border-b"
+          style={{ borderColor: "#1a1a1a" }}
+        >
+          <span style={{ color: "#333", fontSize: "9px", letterSpacing: "0.2em", width: "80px" }}>CHANNEL</span>
+          <span style={{ color: "#333", fontSize: "9px", letterSpacing: "0.2em" }}>ADDRESS</span>
+        </div>
+
+        {[
+          { label: "[ EMAIL ]", value: "anjurondali@gmail.com", href: "mailto:anjurondali@gmail.com" },
+          { label: "[ GITHUB ]", value: "github.com/jarondsss", href: "https://github.com/jarondsss" },
+          { label: "[ LINKEDIN ]", value: "linkedin/juan-akbar-ronaldi", href: "https://www.linkedin.com/in/juan-akbar-ronaldi-81772236b" },
+        ].map((item) => (
+          <motion.a
+            key={item.label}
+            variants={fadeUp}
+            href={item.href}
+            target={item.href.startsWith("mailto") ? undefined : "_blank"}
+            rel={item.href.startsWith("mailto") ? undefined : "noopener noreferrer"}
+            className="coder-row group"
+            style={{ gap: "32px", textDecoration: "none" }}
+          >
+            <span style={{ color: "#e61919", fontSize: "10px", letterSpacing: "0.14em", width: "100px", flexShrink: 0 }}>
+              {item.label}
+            </span>
+            <span
+              style={{
+                color: "#666",
+                fontSize: "12px",
+                letterSpacing: "0.04em",
+                flex: 1,
+              }}
+              className="group-hover:text-[#eaeaea] transition-colors"
+            >
+              {item.value}
+            </span>
+            <span style={{ color: "#e61919", fontSize: "11px" }}>&gt;&gt;&gt;</span>
+          </motion.a>
+        ))}
+
+        {/* Metadata footer */}
+        <motion.div
+          variants={fadeUp}
+          className="py-10 flex flex-col gap-2"
+        >
+          <div style={{ color: "#333", fontSize: "10px", letterSpacing: "0.14em", textTransform: "uppercase" }}>
+            LOCATION: PAMULANG · TANGERANG SELATAN · ID
+          </div>
+          <div style={{ color: "#333", fontSize: "10px", letterSpacing: "0.14em", textTransform: "uppercase" }}>
+            AVAILABILITY: OPEN · REMOTE-FRIENDLY · FREELANCE OK
+          </div>
+          <div style={{ color: "#1a1a1a", fontSize: "10px", letterSpacing: "0.14em", textTransform: "uppercase", marginTop: "16px" }}>
+            [ EOF ] // JUAN_AR PORTFOLIO_v2.6 · {new Date().getFullYear()}
+          </div>
+        </motion.div>
+      </motion.div>
     </section>
   );
 }

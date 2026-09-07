@@ -288,6 +288,121 @@ function EducationSection() {
   );
 }
 
+const coderStack = [
+  { index: "01", name: "NEXT.JS", category: "FRONTEND" },
+  { index: "02", name: "TYPESCRIPT", category: "FRONTEND" },
+  { index: "03", name: "TAILWIND CSS", category: "FRONTEND" },
+  { index: "04", name: "FRAMER MOTION", category: "FRONTEND" },
+  { index: "05", name: "REACT / VITE", category: "FRONTEND" },
+  { index: "06", name: "PRISMA ORM", category: "BACKEND" },
+  { index: "07", name: "SUPABASE", category: "BACKEND" },
+  { index: "08", name: "SQLITE", category: "BACKEND" },
+  { index: "09", name: "OPENAI API", category: "AI / DATA" },
+  { index: "10", name: "RECHARTS", category: "AI / DATA" },
+  { index: "11", name: "LEAFLET", category: "AI / DATA" },
+  { index: "12", name: "KOTLIN / ANDROID", category: "MOBILE" },
+  { index: "13", name: "CAPACITOR", category: "MOBILE" },
+  { index: "14", name: "GRADLE", category: "MOBILE" },
+];
+
+function CoderSkillsSection() {
+  return (
+    <section
+      id="skills"
+      style={{ background: "#0a0a0a", fontFamily: "var(--font-geist-mono), monospace" }}
+    >
+      {/* Section header */}
+      <div
+        className="px-6 md:px-16 py-10 border-b"
+        style={{ borderColor: "#1a1a1a" }}
+      >
+        <motion.div
+          variants={fadeUp}
+          initial="hidden"
+          whileInView="show"
+          viewport={{ once: true, margin: "-80px" }}
+        >
+          <span style={{ color: "#e61919", fontSize: "10px", letterSpacing: "0.18em", textTransform: "uppercase" }}>
+            // TECH_ARSENAL
+          </span>
+          <h2
+            style={{
+              fontSize: "clamp(2.5rem, 6vw, 5rem)",
+              fontWeight: 900,
+              lineHeight: 0.9,
+              letterSpacing: "-0.03em",
+              textTransform: "uppercase",
+              color: "#eaeaea",
+              marginTop: "12px",
+            }}
+          >
+            STACK
+            <br />
+            <span style={{ color: "#333" }}>BREAKDOWN</span>
+          </h2>
+        </motion.div>
+      </div>
+
+      {/* Stack table */}
+      <motion.div
+        variants={stagger}
+        initial="hidden"
+        whileInView="show"
+        viewport={{ once: true, margin: "-60px" }}
+        className="px-6 md:px-16"
+      >
+        {/* Table header */}
+        <div
+          className="flex items-center gap-8 py-3 border-b"
+          style={{ borderColor: "#1a1a1a" }}
+        >
+          <span style={{ color: "#333", fontSize: "9px", letterSpacing: "0.2em", width: "32px" }}>#</span>
+          <span style={{ color: "#333", fontSize: "9px", letterSpacing: "0.2em", flex: 1 }}>TECHNOLOGY</span>
+          <span style={{ color: "#333", fontSize: "9px", letterSpacing: "0.2em", width: "120px" }}>CATEGORY</span>
+          <span style={{ color: "#333", fontSize: "9px", letterSpacing: "0.2em", width: "32px" }}></span>
+        </div>
+
+        {coderStack.map((item) => (
+          <motion.div
+            key={item.index}
+            variants={fadeUp}
+            className="coder-row group"
+            style={{ gap: "32px" }}
+          >
+            <span style={{ color: "#333", fontSize: "10px", letterSpacing: "0.1em", width: "32px" }}>
+              {item.index}
+            </span>
+            <span
+              style={{
+                color: "#eaeaea",
+                fontSize: "13px",
+                fontWeight: 700,
+                letterSpacing: "0.06em",
+                flex: 1,
+              }}
+            >
+              {item.name}
+            </span>
+            <span
+              style={{
+                color: "#444",
+                fontSize: "9px",
+                letterSpacing: "0.18em",
+                width: "120px",
+              }}
+            >
+              {item.category}
+            </span>
+            <span style={{ color: "#e61919", fontSize: "11px", width: "32px" }}>&gt;&gt;&gt;</span>
+          </motion.div>
+        ))}
+
+        <div className="py-10" />
+      </motion.div>
+    </section>
+  );
+}
+
 export default function ContentSection() {
   const { persona } = usePersona();
 
@@ -301,5 +416,5 @@ export default function ContentSection() {
     );
   }
 
-  return null;
+  return <CoderSkillsSection />;
 }

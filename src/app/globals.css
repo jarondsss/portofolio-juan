@@ -230,3 +230,94 @@ body {
     width: auto !important;
   }
 }
+
+/* ── Coder Mode: CRT Scanlines ──────────────────────── */
+.coder-scanlines {
+  position: relative;
+}
+
+.coder-scanlines::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 50;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(0, 0, 0, 0.06) 2px,
+    rgba(0, 0, 0, 0.06) 4px
+  );
+}
+
+/* ── Coder bento grid ────────────────────────────────── */
+.coder-grid {
+  display: grid;
+  gap: 1px;
+  background: #1a1a1a;
+}
+
+.coder-cell {
+  background: #0a0a0a;
+}
+
+/* ── Coder table rows ────────────────────────────────── */
+.coder-row {
+  display: flex;
+  align-items: center;
+  padding: 12px 16px;
+  border-bottom: 1px solid #1a1a1a;
+  transition: background 0.15s, border-left-color 0.15s;
+  cursor: pointer;
+  border-left: 4px solid transparent;
+}
+
+.coder-row:hover,
+.coder-row.active {
+  background: rgba(230, 25, 25, 0.07);
+  border-left-color: #e61919;
+}
+
+/* ── CTA square buttons ──────────────────────────────── */
+.cta-coder {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 24px;
+  border: 1px solid #e61919;
+  color: #eaeaea;
+  font-family: var(--font-geist-mono), monospace;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  transition: background 0.2s, color 0.2s;
+  border-radius: 0;
+}
+
+.cta-coder:hover {
+  background: #e61919;
+  color: #0a0a0a;
+}
+
+.cta-coder-ghost {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 24px;
+  border: 1px solid #333;
+  color: #666;
+  font-family: var(--font-geist-mono), monospace;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  transition: border-color 0.2s, color 0.2s;
+  border-radius: 0;
+}
+
+.cta-coder-ghost:hover {
+  border-color: #eaeaea;
+  color: #eaeaea;
+}

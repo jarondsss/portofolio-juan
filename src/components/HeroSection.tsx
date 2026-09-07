@@ -179,21 +179,180 @@ export default function HeroSection() {
   }
 
   return (
-    <section className="min-h-screen flex flex-col justify-center items-center bg-black text-green-400 px-6 text-center font-mono">
-      <p className="text-xs text-green-600 mb-2">&gt; whoami</p>
-      <h1 className="text-5xl md:text-7xl font-bold mb-4 text-white">
-        <span className="text-green-400">Juan</span>
-      </h1>
-      <p className="text-lg md:text-xl text-green-300 max-w-xl">
-        HR guy by day. Vibe coder by night. Building stuff that works, one commit at a time. 🧑💻
-      </p>
-      <div className="mt-8 flex gap-4 flex-wrap justify-center">
-        <a href="#projects" className="px-6 py-3 bg-green-400 text-black rounded-full hover:bg-green-300 transition font-bold">
-          See Projects
-        </a>
-        <a href="https://github.com/jarondsss" target="_blank" rel="noopener noreferrer" className="px-6 py-3 border border-green-400 text-green-400 rounded-full hover:bg-green-400 hover:text-black transition">
-          GitHub
-        </a>
+    <section
+      className="coder-scanlines min-h-[100dvh] flex flex-col justify-center px-6 md:px-16 relative overflow-hidden"
+      style={{ background: "#0a0a0a", fontFamily: "var(--font-geist-mono), monospace" }}
+    >
+      {/* Top metadata bar */}
+      <div
+        className="absolute top-0 left-0 right-0 flex items-center justify-between px-6 md:px-16 py-4 border-b"
+        style={{ borderColor: "#1a1a1a" }}
+      >
+        <span style={{ color: "#444", fontSize: "10px", letterSpacing: "0.12em" }}>
+          [ JUAN_AR ] // PORTFOLIO_v2.6
+        </span>
+        <span style={{ color: "#444", fontSize: "10px", letterSpacing: "0.12em" }}>
+          UNIT / D-01 · TANGERANG-SELATAN · ID
+        </span>
+      </div>
+
+      {/* Main content */}
+      <div className="w-full max-w-6xl mx-auto">
+        {/* Eyebrow */}
+        <motion.div
+          variants={fadeUp}
+          initial="hidden"
+          animate="show"
+          custom={0}
+          className="mb-6"
+        >
+          <span
+            style={{
+              color: "#e61919",
+              fontSize: "10px",
+              letterSpacing: "0.18em",
+              textTransform: "uppercase",
+            }}
+          >
+            /// CODER_MODE · ACTIVE
+          </span>
+        </motion.div>
+
+        {/* Macro headline */}
+        <motion.h1
+          variants={fadeUp}
+          initial="hidden"
+          animate="show"
+          custom={0.1}
+          style={{
+            fontSize: "clamp(4.5rem, 14vw, 11rem)",
+            fontWeight: 900,
+            lineHeight: 0.88,
+            letterSpacing: "-0.04em",
+            textTransform: "uppercase",
+            color: "#eaeaea",
+          }}
+        >
+          JUAN.
+          <br />
+          <span style={{ color: "#e61919" }}>RONALDI</span>
+        </motion.h1>
+
+        {/* Red divider */}
+        <motion.div
+          initial={{ scaleX: 0, opacity: 0 }}
+          animate={{ scaleX: 1, opacity: 1 }}
+          transition={{ duration: 0.9, delay: 0.3, ease: [0.32, 0.72, 0, 1] }}
+          style={{
+            height: "2px",
+            background: "#e61919",
+            transformOrigin: "left",
+            margin: "24px 0",
+          }}
+        />
+
+        {/* Tagline */}
+        <motion.p
+          variants={fadeUp}
+          initial="hidden"
+          animate="show"
+          custom={0.35}
+          style={{
+            color: "#666",
+            fontSize: "12px",
+            letterSpacing: "0.08em",
+            textTransform: "uppercase",
+            maxWidth: "480px",
+            lineHeight: 1.7,
+          }}
+        >
+          HR professional / self-taught developer — building full-stack apps,
+          Android tools, and logistics systems that actually work.
+        </motion.p>
+
+        {/* CTA row */}
+        <motion.div
+          variants={fadeUp}
+          initial="hidden"
+          animate="show"
+          custom={0.45}
+          className="mt-10 flex gap-4 flex-wrap items-center"
+        >
+          <a href="#projects" className="cta-coder">
+            SEE PROJECTS
+            <span style={{ color: "#e61919" }}>&gt;&gt;&gt;</span>
+          </a>
+          <a
+            href="https://github.com/jarondsss"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="cta-coder-ghost"
+          >
+            GITHUB ↗
+          </a>
+        </motion.div>
+
+        {/* Stats grid */}
+        <motion.div
+          variants={fadeUp}
+          initial="hidden"
+          animate="show"
+          custom={0.55}
+          className="mt-16 grid grid-cols-2 md:grid-cols-4"
+          style={{ border: "1px solid #1a1a1a" }}
+        >
+          {[
+            { label: "[ PROJECTS ]", value: "05" },
+            { label: "[ STACK ]", value: "12+" },
+            { label: "[ FOCUS ]", value: "FULLSTACK" },
+            { label: "[ STATUS ]", value: "OPEN" },
+          ].map((item, i) => (
+            <div
+              key={item.label}
+              className="p-5"
+              style={{
+                borderRight: i < 3 ? "1px solid #1a1a1a" : "none",
+                borderBottom: "none",
+              }}
+            >
+              <div style={{ color: "#444", fontSize: "9px", letterSpacing: "0.18em", marginBottom: "8px" }}>
+                {item.label}
+              </div>
+              <div
+                style={{
+                  color: item.label === "[ STATUS ]" ? "#4af626" : "#eaeaea",
+                  fontSize: "20px",
+                  fontWeight: 700,
+                  letterSpacing: "-0.02em",
+                }}
+              >
+                {item.value}
+              </div>
+            </div>
+          ))}
+        </motion.div>
+
+        {/* Availability */}
+        <motion.div
+          variants={fadeUp}
+          initial="hidden"
+          animate="show"
+          custom={0.65}
+          className="mt-6 flex items-center gap-3"
+        >
+          <span
+            style={{
+              display: "inline-block",
+              width: "6px",
+              height: "6px",
+              background: "#4af626",
+              boxShadow: "0 0 8px #4af626",
+            }}
+          />
+          <span style={{ color: "#444", fontSize: "10px", letterSpacing: "0.12em", textTransform: "uppercase" }}>
+            Open to freelance, collab, and full-time remote
+          </span>
+        </motion.div>
       </div>
     </section>
   );
