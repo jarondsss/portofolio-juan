@@ -3,15 +3,24 @@ import HeroSection from "@/components/HeroSection";
 import ContentSection from "@/components/ContentSection";
 import ProjectShowcase from "@/components/ProjectShowcase";
 import ContactSection from "@/components/ContactSection";
+import PixelFishCanvas from "@/components/PixelFishCanvas";
 
 export default function Home() {
   return (
-    <main>
+    <>
+      {/* Fixed canvas layer — behind everything */}
+      <PixelFishCanvas />
+
+      {/* Fixed toggle — above everything */}
       <PersonaToggle />
-      <HeroSection />
-      <ContentSection />
-      <ProjectShowcase />
-      <ContactSection />
-    </main>
+
+      {/* Page content — above canvas */}
+      <main>
+        <HeroSection />
+        <ContentSection />
+        <ProjectShowcase />
+        <ContactSection />
+      </main>
+    </>
   );
 }

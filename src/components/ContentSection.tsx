@@ -4,21 +4,20 @@ import { motion, Variants } from "framer-motion";
 import { usePersona } from "@/context/PersonaContext";
 
 const fadeUp: Variants = {
-  hidden: { opacity: 0, y: 24, filter: "blur(4px)" },
+  hidden: { opacity: 0, y: 12 },
   show: {
     opacity: 1,
     y: 0,
-    filter: "blur(0px)",
-    transition: { duration: 0.7, ease: [0.32, 0.72, 0, 1] },
+    transition: { duration: 0.55, ease: [0.32, 0.72, 0, 1] },
   },
 };
 
 const stagger: Variants = {
   hidden: {},
-  show: {
-    transition: { staggerChildren: 0.08 },
-  },
+  show: { transition: { staggerChildren: 0.07 } },
 };
+
+// ── Data ──────────────────────────────────────────────────
 
 const hrExperience = [
   {
@@ -66,228 +65,6 @@ const hrSkillGroups = [
   },
 ];
 
-const projects = [
-  {
-    name: "personal-hr",
-    desc: "Full-stack HR management app — attendance, payroll, employee data.",
-    tech: ["Next.js", "TypeScript", "Prisma", "Tailwind", "SQLite"],
-    url: "https://personal-hr-henna.vercel.app/",
-  },
-  {
-    name: "logileap",
-    desc: "Logistics tracking app with AI integration, maps, and real-time data visualization.",
-    tech: ["Next.js", "TypeScript", "Prisma", "Tailwind", "Supabase", "OpenAI", "Recharts", "Leaflet"],
-    url: "https://logileap.vercel.app/",
-  },
-  {
-    name: "mastermove-landing",
-    desc: "Landing page for Mastermove Indonesia.",
-    tech: ["Next.js", "TypeScript", "Tailwind", "Framer Motion"],
-    url: "https://www.mastermoveindonesia.com/",
-  },
-  {
-    name: "alokasi",
-    desc: "Mobile-ready budget & cash book app with charts and animations.",
-    tech: ["React", "Vite", "Capacitor", "Recharts", "Framer Motion"],
-    url: "#",
-  },
-  {
-    name: "driving-app",
-    desc: "Native Android driver mode app with voice selection and batch message support.",
-    tech: ["Android", "Kotlin", "Gradle"],
-    url: "#",
-  },
-];
-
-function ExperienceSection() {
-  return (
-    <section id="experience" className="hr-bg px-6 py-32">
-      <div className="max-w-5xl mx-auto">
-        <motion.div
-          variants={fadeUp}
-          initial="hidden"
-          whileInView="show"
-          viewport={{ once: true, margin: "-80px" }}
-          className="mb-14"
-        >
-          <span className="eyebrow-tag">Pengalaman Kerja</span>
-          <h2
-            className="mt-6 text-4xl md:text-5xl font-bold"
-            style={{ color: "var(--foreground)", letterSpacing: "-0.03em" }}
-          >
-            Tempat saya belajar<br />
-            <span style={{ color: "var(--accent)" }}>di lapangan langsung</span>
-          </h2>
-        </motion.div>
-
-        <motion.div
-          variants={stagger}
-          initial="hidden"
-          whileInView="show"
-          viewport={{ once: true, margin: "-60px" }}
-          className="space-y-6"
-        >
-          {hrExperience.map((exp) => (
-            <motion.div
-              key={exp.role + exp.company}
-              variants={fadeUp}
-              className="pixel-card p-6 md:p-8"
-            >
-              <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-2 mb-4">
-                <div>
-                  <h3 className="text-lg font-semibold leading-snug" style={{ color: "var(--foreground)" }}>
-                    {exp.role}
-                  </h3>
-                  <p className="text-sm mt-1" style={{ color: "var(--accent)" }}>
-                    {exp.company}
-                    <span style={{ color: "var(--muted)" }}> · {exp.location}</span>
-                  </p>
-                </div>
-                <span
-                  className="text-xs whitespace-nowrap px-3 py-1 rounded-full flex-shrink-0"
-                  style={{ background: "var(--accent-soft)", color: "var(--accent)", border: "1px solid rgba(26,115,232,0.15)" }}
-                >
-                  {exp.period}
-                </span>
-              </div>
-              <p className="text-sm leading-relaxed" style={{ color: "var(--muted)" }}>
-                {exp.desc}
-              </p>
-            </motion.div>
-          ))}
-        </motion.div>
-      </div>
-    </section>
-  );
-}
-
-function SkillsSection() {
-  return (
-    <section className="hr-bg-alt px-6 py-32">
-      <div className="max-w-5xl mx-auto">
-        <motion.div
-          variants={fadeUp}
-          initial="hidden"
-          whileInView="show"
-          viewport={{ once: true, margin: "-80px" }}
-          className="mb-14"
-        >
-          <span className="eyebrow-tag">Kompetensi</span>
-          <h2
-            className="mt-6 text-4xl md:text-5xl font-bold"
-            style={{ color: "var(--foreground)", letterSpacing: "-0.03em" }}
-          >
-            Keahlian yang diterapkan<br />
-            <span style={{ color: "var(--accent)" }}>setiap hari di tempat kerja</span>
-          </h2>
-        </motion.div>
-
-        <motion.div
-          variants={stagger}
-          initial="hidden"
-          whileInView="show"
-          viewport={{ once: true, margin: "-60px" }}
-          className="grid grid-cols-1 md:grid-cols-3 gap-6"
-        >
-          {hrSkillGroups.map((group) => (
-            <motion.div
-              key={group.category}
-              variants={fadeUp}
-              className="pixel-card p-6"
-            >
-              <p className="text-[10px] font-semibold tracking-[0.18em] uppercase mb-4" style={{ color: "var(--accent)" }}>
-                {group.category}
-              </p>
-              <div className="flex flex-col gap-2">
-                {group.skills.map((skill) => (
-                  <span
-                    key={skill}
-                    className="text-sm py-2 px-3 rounded-lg"
-                    style={{ color: "var(--foreground)", background: "var(--accent-soft)" }}
-                  >
-                    {skill}
-                  </span>
-                ))}
-              </div>
-            </motion.div>
-          ))}
-        </motion.div>
-      </div>
-    </section>
-  );
-}
-
-function EducationSection() {
-  return (
-    <section className="hr-bg px-6 py-32">
-      <div className="max-w-5xl mx-auto">
-        <motion.div
-          variants={fadeUp}
-          initial="hidden"
-          whileInView="show"
-          viewport={{ once: true, margin: "-80px" }}
-          className="mb-14"
-        >
-          <span className="eyebrow-tag">Pendidikan</span>
-          <h2
-            className="mt-6 text-4xl md:text-5xl font-bold"
-            style={{ color: "var(--foreground)", letterSpacing: "-0.03em" }}
-          >
-            Latar belakang<br />
-            <span style={{ color: "var(--accent)" }}>akademik</span>
-          </h2>
-        </motion.div>
-
-        <motion.div
-          variants={stagger}
-          initial="hidden"
-          whileInView="show"
-          viewport={{ once: true, margin: "-60px" }}
-          className="space-y-5"
-        >
-          <motion.div variants={fadeUp} className="pixel-card p-6 md:p-8">
-            <div className="flex items-start justify-between gap-4 flex-wrap">
-              <div>
-                <h3 className="text-base font-semibold" style={{ color: "var(--foreground)" }}>
-                  Universitas Muhammadiyah Jakarta
-                </h3>
-                <p className="text-sm mt-1" style={{ color: "var(--muted)" }}>
-                  Ilmu Komunikasi · Cirendeu
-                </p>
-              </div>
-              <span
-                className="text-xs px-3 py-1 rounded-full flex-shrink-0"
-                style={{ background: "var(--accent-soft)", color: "var(--accent)", border: "1px solid rgba(26,115,232,0.15)" }}
-              >
-                S1
-              </span>
-            </div>
-          </motion.div>
-
-          <motion.div variants={fadeUp} className="pixel-card p-6 md:p-8">
-            <div className="flex items-start justify-between gap-4 flex-wrap">
-              <div>
-                <h3 className="text-base font-semibold" style={{ color: "var(--foreground)" }}>
-                  SMKN 1 Kabupaten Tangerang
-                </h3>
-                <p className="text-sm mt-1" style={{ color: "var(--muted)" }}>
-                  Teknik Komputer dan Jaringan · Panongan
-                </p>
-              </div>
-              <span
-                className="text-xs px-3 py-1 rounded-full flex-shrink-0"
-                style={{ background: "var(--accent-soft)", color: "var(--accent)", border: "1px solid rgba(26,115,232,0.15)" }}
-              >
-                2017
-              </span>
-            </div>
-          </motion.div>
-        </motion.div>
-      </div>
-    </section>
-  );
-}
-
 const coderStack = [
   { index: "01", name: "NEXT.JS", category: "FRONTEND" },
   { index: "02", name: "TYPESCRIPT", category: "FRONTEND" },
@@ -305,104 +82,362 @@ const coderStack = [
   { index: "14", name: "GRADLE", category: "MOBILE" },
 ];
 
-function CoderSkillsSection() {
+// ── Section header prompt ─────────────────────────────────
+function SectionPrompt({ cmd }: { cmd: string }) {
+  return (
+    <div className="prompt-line mb-3">
+      <span className="prompt-user">guest</span>
+      <span className="prompt-path">@portfolio</span>
+      <span style={{ color: "var(--text-ghost)" }}>:</span>
+      <span className="prompt-path">~</span>
+      <span style={{ color: "var(--text-ghost)" }}>$ </span>
+      <span className="prompt-cmd">{cmd}</span>
+    </div>
+  );
+}
+
+// ── HR Experience Section ─────────────────────────────────
+function ExperienceSection() {
   return (
     <section
-      id="skills"
-      style={{ background: "#0a0a0a", fontFamily: "var(--font-geist-mono), monospace" }}
+      id="experience"
+      className="content-layer section-void px-4 md:px-8 lg:px-16 py-28"
     >
-      {/* Section header */}
-      <div
-        className="px-6 md:px-16 py-10 border-b"
-        style={{ borderColor: "#1a1a1a" }}
-      >
+      <div className="max-w-4xl mx-auto">
+        {/* Section divider */}
+        <div className="section-divider mb-12" />
+
         <motion.div
-          variants={fadeUp}
+          variants={stagger}
           initial="hidden"
           whileInView="show"
-          viewport={{ once: true, margin: "-80px" }}
+          viewport={{ once: true, margin: "-60px" }}
         >
-          <span style={{ color: "#e61919", fontSize: "10px", letterSpacing: "0.18em", textTransform: "uppercase" }}>
-            // TECH_ARSENAL
-          </span>
-          <h2
-            style={{
-              fontSize: "clamp(2.5rem, 6vw, 5rem)",
-              fontWeight: 900,
-              lineHeight: 0.9,
-              letterSpacing: "-0.03em",
-              textTransform: "uppercase",
-              color: "#eaeaea",
-              marginTop: "12px",
-            }}
+          {/* Prompt */}
+          <motion.div variants={fadeUp}>
+            <SectionPrompt cmd="cat experience.log" />
+          </motion.div>
+
+          {/* Heading */}
+          <motion.h2
+            variants={fadeUp}
+            className="text-display mb-10"
+            style={{ color: "var(--text-primary)" }}
           >
-            STACK
-            <br />
-            <span style={{ color: "#333" }}>BREAKDOWN</span>
-          </h2>
+            experience
+            <span style={{ color: "var(--blue-glow)" }}>.log</span>
+          </motion.h2>
+
+          {/* Experience log entries */}
+          <motion.div variants={stagger} className="space-y-2">
+            {hrExperience.map((exp, i) => (
+              <motion.div
+                key={exp.role + exp.company}
+                variants={fadeUp}
+                className="term-panel-hover p-5 md:p-6"
+              >
+                {/* Log line header */}
+                <div className="flex flex-wrap items-start justify-between gap-x-6 gap-y-1 mb-3">
+                  <div className="flex items-start gap-3 flex-wrap">
+                    <span
+                      className="log-timestamp flex-shrink-0 mt-1"
+                      style={{ color: "var(--text-ghost)", minWidth: "32px" }}
+                    >
+                      {String(i + 1).padStart(2, "0")}
+                    </span>
+                    <div>
+                      <span className="log-name">{exp.role}</span>
+                      <span className="log-sep">—</span>
+                      <span className="log-stack">{exp.company}</span>
+                      <span
+                        style={{
+                          color: "var(--text-ghost)",
+                          fontSize: "11px",
+                          marginLeft: "6px",
+                        }}
+                      >
+                        · {exp.location}
+                      </span>
+                    </div>
+                  </div>
+                  <span
+                    style={{
+                      color: "var(--text-ghost)",
+                      fontSize: "11px",
+                      letterSpacing: "0.04em",
+                      flexShrink: 0,
+                    }}
+                  >
+                    {exp.period}
+                  </span>
+                </div>
+
+                {/* Description */}
+                <p
+                  className="log-desc"
+                  style={{ paddingLeft: "48px" }}
+                >
+                  {exp.desc}
+                </p>
+              </motion.div>
+            ))}
+          </motion.div>
         </motion.div>
       </div>
-
-      {/* Stack table */}
-      <motion.div
-        variants={stagger}
-        initial="hidden"
-        whileInView="show"
-        viewport={{ once: true, margin: "-60px" }}
-        className="px-6 md:px-16"
-      >
-        {/* Table header */}
-        <div
-          className="flex items-center gap-8 py-3 border-b"
-          style={{ borderColor: "#1a1a1a" }}
-        >
-          <span style={{ color: "#333", fontSize: "9px", letterSpacing: "0.2em", width: "32px" }}>#</span>
-          <span style={{ color: "#333", fontSize: "9px", letterSpacing: "0.2em", flex: 1 }}>TECHNOLOGY</span>
-          <span style={{ color: "#333", fontSize: "9px", letterSpacing: "0.2em", width: "120px" }}>CATEGORY</span>
-          <span style={{ color: "#333", fontSize: "9px", letterSpacing: "0.2em", width: "32px" }}></span>
-        </div>
-
-        {coderStack.map((item) => (
-          <motion.div
-            key={item.index}
-            variants={fadeUp}
-            className="coder-row group"
-            style={{ gap: "32px" }}
-          >
-            <span style={{ color: "#333", fontSize: "10px", letterSpacing: "0.1em", width: "32px" }}>
-              {item.index}
-            </span>
-            <span
-              style={{
-                color: "#eaeaea",
-                fontSize: "13px",
-                fontWeight: 700,
-                letterSpacing: "0.06em",
-                flex: 1,
-              }}
-            >
-              {item.name}
-            </span>
-            <span
-              style={{
-                color: "#444",
-                fontSize: "9px",
-                letterSpacing: "0.18em",
-                width: "120px",
-              }}
-            >
-              {item.category}
-            </span>
-            <span style={{ color: "#e61919", fontSize: "11px", width: "32px" }}>&gt;&gt;&gt;</span>
-          </motion.div>
-        ))}
-
-        <div className="py-10" />
-      </motion.div>
     </section>
   );
 }
 
+// ── HR Skills Section ─────────────────────────────────────
+function SkillsSection() {
+  return (
+    <section
+      className="content-layer section-panel px-4 md:px-8 lg:px-16 py-24"
+    >
+      <div className="max-w-4xl mx-auto">
+        <div className="section-divider mb-12" />
+
+        <motion.div
+          variants={stagger}
+          initial="hidden"
+          whileInView="show"
+          viewport={{ once: true, margin: "-60px" }}
+        >
+          <motion.div variants={fadeUp}>
+            <SectionPrompt cmd="ls -la skills/" />
+          </motion.div>
+
+          <motion.h2
+            variants={fadeUp}
+            className="text-display mb-10"
+          >
+            skills
+            <span style={{ color: "var(--blue-glow)" }}>/</span>
+          </motion.h2>
+
+          <motion.div
+            variants={stagger}
+            className="grid grid-cols-1 md:grid-cols-3 gap-3"
+          >
+            {hrSkillGroups.map((group) => (
+              <motion.div
+                key={group.category}
+                variants={fadeUp}
+                className="term-panel p-5"
+              >
+                <div
+                  className="text-label mb-4"
+                  style={{ color: "var(--blue-glow)", borderBottom: "1px solid var(--line)", paddingBottom: "8px" }}
+                >
+                  # {group.category}
+                </div>
+                <div className="flex flex-col gap-2">
+                  {group.skills.map((skill) => (
+                    <div
+                      key={skill}
+                      className="prompt-line"
+                      style={{ fontSize: "12px" }}
+                    >
+                      <span style={{ color: "var(--text-ghost)" }}>  — </span>
+                      <span style={{ color: "var(--text-primary)" }}>{skill}</span>
+                    </div>
+                  ))}
+                </div>
+              </motion.div>
+            ))}
+          </motion.div>
+        </motion.div>
+      </div>
+    </section>
+  );
+}
+
+// ── HR Education Section ──────────────────────────────────
+function EducationSection() {
+  return (
+    <section
+      className="content-layer section-void px-4 md:px-8 lg:px-16 py-24"
+    >
+      <div className="max-w-4xl mx-auto">
+        <div className="section-divider mb-12" />
+
+        <motion.div
+          variants={stagger}
+          initial="hidden"
+          whileInView="show"
+          viewport={{ once: true, margin: "-60px" }}
+        >
+          <motion.div variants={fadeUp}>
+            <SectionPrompt cmd="cat education.log" />
+          </motion.div>
+
+          <motion.h2
+            variants={fadeUp}
+            className="text-display mb-10"
+          >
+            education
+            <span style={{ color: "var(--blue-glow)" }}>.log</span>
+          </motion.h2>
+
+          <motion.div variants={stagger} className="space-y-2">
+            {[
+              {
+                idx: "01",
+                name: "Universitas Muhammadiyah Jakarta",
+                field: "Ilmu Komunikasi",
+                location: "Cirendeu",
+                degree: "S1",
+              },
+              {
+                idx: "02",
+                name: "SMKN 1 Kabupaten Tangerang",
+                field: "Teknik Komputer dan Jaringan",
+                location: "Panongan",
+                degree: "2017",
+              },
+            ].map((edu) => (
+              <motion.div
+                key={edu.name}
+                variants={fadeUp}
+                className="term-panel-hover p-5 md:p-6"
+              >
+                <div className="flex flex-wrap items-start gap-x-6 gap-y-1">
+                  <span
+                    className="log-timestamp flex-shrink-0 mt-1"
+                    style={{ color: "var(--text-ghost)", minWidth: "32px" }}
+                  >
+                    {edu.idx}
+                  </span>
+                  <div className="flex-1">
+                    <span className="log-name">{edu.name}</span>
+                    <span className="log-sep">—</span>
+                    <span className="log-stack">{edu.field}</span>
+                    <span
+                      style={{
+                        color: "var(--text-ghost)",
+                        fontSize: "11px",
+                        marginLeft: "6px",
+                      }}
+                    >
+                      · {edu.location}
+                    </span>
+                  </div>
+                  <span
+                    style={{
+                      color: "var(--text-ghost)",
+                      fontSize: "11px",
+                      letterSpacing: "0.04em",
+                      flexShrink: 0,
+                    }}
+                  >
+                    [{edu.degree}]
+                  </span>
+                </div>
+              </motion.div>
+            ))}
+          </motion.div>
+        </motion.div>
+      </div>
+    </section>
+  );
+}
+
+// ── Coder Stack Section ───────────────────────────────────
+function CoderSkillsSection() {
+  return (
+    <section
+      id="skills"
+      className="content-layer section-void px-4 md:px-8 lg:px-16 py-28"
+    >
+      <div className="max-w-4xl mx-auto">
+        <div className="section-divider mb-12" />
+
+        <motion.div
+          variants={stagger}
+          initial="hidden"
+          whileInView="show"
+          viewport={{ once: true, margin: "-60px" }}
+        >
+          <motion.div variants={fadeUp}>
+            <SectionPrompt cmd="cat stack.json" />
+          </motion.div>
+
+          <motion.h2
+            variants={fadeUp}
+            className="text-display mb-10"
+          >
+            stack
+            <span style={{ color: "var(--blue-glow)" }}>.json</span>
+          </motion.h2>
+
+          {/* Table header */}
+          <div
+            className="flex items-center gap-6 py-2 mb-1"
+            style={{
+              borderBottom: "1px solid var(--line)",
+              fontSize: "10px",
+              letterSpacing: "0.16em",
+              color: "var(--text-ghost)",
+            }}
+          >
+            <span style={{ width: "32px" }}>#</span>
+            <span style={{ flex: 1 }}>TECHNOLOGY</span>
+            <span style={{ width: "120px" }}>CATEGORY</span>
+          </div>
+
+          {/* Stack rows */}
+          <motion.div variants={stagger}>
+            {coderStack.map((item) => (
+              <motion.div
+                key={item.index}
+                variants={fadeUp}
+                className="flex items-center gap-6 py-3"
+                style={{
+                  borderBottom: "1px solid var(--line)",
+                  cursor: "default",
+                  transition: "background 120ms",
+                }}
+                onMouseEnter={(e) => {
+                  (e.currentTarget as HTMLElement).style.background = "rgba(30,99,200,0.04)";
+                }}
+                onMouseLeave={(e) => {
+                  (e.currentTarget as HTMLElement).style.background = "transparent";
+                }}
+              >
+                <span style={{ color: "var(--text-ghost)", fontSize: "10px", width: "32px" }}>
+                  {item.index}
+                </span>
+                <span
+                  style={{
+                    color: "var(--text-primary)",
+                    fontSize: "13px",
+                    fontWeight: 500,
+                    letterSpacing: "0.05em",
+                    flex: 1,
+                  }}
+                >
+                  {item.name}
+                </span>
+                <span
+                  style={{
+                    color: "var(--text-ghost)",
+                    fontSize: "10px",
+                    letterSpacing: "0.12em",
+                    width: "120px",
+                  }}
+                >
+                  {item.category}
+                </span>
+              </motion.div>
+            ))}
+          </motion.div>
+        </motion.div>
+      </div>
+    </section>
+  );
+}
+
+// ── Main export ───────────────────────────────────────────
 export default function ContentSection() {
   const { persona } = usePersona();
 

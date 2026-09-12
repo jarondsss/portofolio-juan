@@ -1,359 +1,371 @@
 "use client";
 
-import { motion, Variants } from "framer-motion";
+import { motion } from "framer-motion";
+import { useEffect, useState, useRef } from "react";
 import { usePersona } from "@/context/PersonaContext";
 
-const fadeUp: Variants = {
-  hidden: { opacity: 0, y: 24, filter: "blur(4px)" },
-  show: (delay: number = 0) => ({
-    opacity: 1,
-    y: 0,
-    filter: "blur(0px)",
-    transition: { duration: 0.8, delay, ease: [0.32, 0.72, 0, 1] },
-  }),
-};
+// ── Typewriter hook ───────────────────────────────────────
+function useTypewriter(text: string, speed = 34, startDelay = 400) {
+  const [displayed, setDisplayed] = useState("");
+  const [done, setDone] = useState(false);
 
-const marqueeItems = [
-  "Human Resources",
-  "People Management",
-  "Recruitment",
-  "Operations",
-  "Employee Relations",
-  "Onboarding",
-  "HR Policy",
-  "Conflict Resolution",
-  "Talent Acquisition",
-  "Payroll",
-  "Performance Review",
-  "Culture Building",
-  "Team Leadership",
-  "Offboarding",
-  "SOP Implementation",
-];
+  useEffect(() => {
+    setDisplayed("");
+    setDone(false);
+    let i = 0;
+    const timeout = setTimeout(() => {
+      const interval = setInterval(() => {
+        i++;
+        setDisplayed(text.slice(0, i));
+        if (i >= text.length) {
+          clearInterval(interval);
+          setDone(true);
+        }
+      }, speed);
+      return () => clearInterval(interval);
+    }, startDelay);
+    return () => clearTimeout(timeout);
+  }, [text, speed, startDelay]);
 
-export default function HeroSection() {
-  const { persona } = usePersona();
+  return { displayed, done };
+}
 
-  if (persona === "hr") {
-    return (
-      <section className="hr-bg min-h-[100dvh] flex flex-col justify-center px-6 relative overflow-hidden">
-        {/* Ambient blue glow — fixed, GPU safe */}
-        <div
-          className="absolute top-[-10%] right-[-5%] w-[600px] h-[600px] rounded-full pointer-events-none"
-          style={{
-            background: "radial-gradient(circle, rgba(66,133,244,0.08) 0%, transparent 70%)",
-          }}
-          aria-hidden="true"
-        />
+// ── Prompt line component ─────────────────────────────────
+function PromptLine({ cmd, delay = 0 }: { cmd: string; delay?: number }) {
+  const { displayed, done } = useTypewriter(cmd, 32, delay);
+  return (
+    <div className="prompt-line" style={{ minHeight: "1.6em" }}>
+      <span className="prompt-user">guest</span>
+      <span className="prompt-path">@portfolio</span>
+      <span style={{ color: "var(--text-ghost)" }}>:</span>
+      <span className="prompt-path">~</span>
+      <span style={{ color: "var(--text-ghost)" }}>$ </span>
+      <span className="prompt-cmd">{displayed}</span>
+      {!done && <span className="cursor-blink" />}
+    </div>
+  );
+}
 
-        {/* Right vertical marquee */}
-        <div
-          className="absolute right-0 top-0 bottom-0 hidden lg:flex flex-col items-end overflow-hidden"
-          style={{
-            width: "200px",
-            maskImage: "linear-gradient(to bottom, transparent 0%, black 15%, black 85%, transparent 100%)",
-          }}
-          aria-hidden="true"
-        >
-          <div className="marquee-track flex flex-col gap-8 pr-8">
-            {[...marqueeItems, ...marqueeItems].map((item, i) => (
-              <span
-                key={i}
-                className="text-[10px] tracking-[0.2em] uppercase whitespace-nowrap"
-                style={{ color: "var(--ink-light)", writingMode: "vertical-rl", transform: "rotate(180deg)" }}
-              >
-                {item}
-              </span>
-            ))}
-          </div>
-        </div>
+// ── Fade in line after delay ──────────────────────────────
+function OutputLine({
+  children,
+  delay = 0,
+  className = "",
+}: {
+  children: React.ReactNode;
+  delay?: number;
+  className?: string;
+}) {
+  return (
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.4, delay }}
+      className={className}
+    >
+      {children}
+    </motion.div>
+  );
+}
 
-        {/* Main content */}
-        <div className="w-full max-w-5xl mx-auto">
-          {/* Eyebrow tag */}
-          <motion.div
-            variants={fadeUp}
-            initial="hidden"
-            animate="show"
-            custom={0}
-            className="mb-8"
-          >
-            <span className="eyebrow-tag">HR & Operations · Tangerang Selatan</span>
-          </motion.div>
+// ── HR Hero ───────────────────────────────────────────────
+function HeroHR() {
+  const [phase, setPhase] = useState(0);
 
-          {/* Display name */}
-          <motion.h1
-            variants={fadeUp}
-            initial="hidden"
-            animate="show"
-            custom={0.1}
-            className="text-7xl md:text-[clamp(5rem,10vw,8rem)] font-bold leading-[0.92] mb-6"
-            style={{ color: "var(--foreground)", letterSpacing: "-0.04em" }}
-          >
-            Juan A.<br />
-            <span style={{ color: "var(--accent)" }}>Ronaldi</span>
-          </motion.h1>
-
-          {/* Accent line */}
-          <motion.div
-            initial={{ width: 0, opacity: 0 }}
-            animate={{ width: "320px", opacity: 1 }}
-            transition={{ duration: 0.9, delay: 0.3, ease: [0.32, 0.72, 0, 1] }}
-            className="h-px mb-8"
-            style={{ background: "linear-gradient(to right, var(--accent), transparent)" }}
-          />
-
-          {/* Tagline */}
-          <motion.p
-            variants={fadeUp}
-            initial="hidden"
-            animate="show"
-            custom={0.35}
-            className="text-lg md:text-xl leading-relaxed max-w-lg"
-            style={{ color: "var(--muted)" }}
-          >
-            6+ tahun di HR dan operasional — dari event lapangan sampai remote company. Spesialisasi di rekrutmen, people ops, dan membangun sistem yang benar-benar dipakai tim.
-          </motion.p>
-
-          {/* CTA row */}
-          <motion.div
-            variants={fadeUp}
-            initial="hidden"
-            animate="show"
-            custom={0.45}
-            className="mt-12 flex gap-4 flex-wrap items-center"
-          >
-            <a
-              href="#experience"
-              className="cta-primary inline-flex items-center gap-3 px-7 py-3.5 text-sm font-semibold"
-              style={{ background: "var(--accent)", color: "#fff" }}
-            >
-              View Experience
-              <span
-                className="w-6 h-6 rounded-full flex items-center justify-center flex-shrink-0"
-                style={{ background: "rgba(255,255,255,0.2)" }}
-              >
-                ↓
-              </span>
-            </a>
-            <a
-              href="#contact"
-              className="inline-flex items-center px-7 py-3.5 text-sm font-medium rounded-full transition-all duration-300"
-              style={{
-                border: "1px solid var(--border)",
-                color: "var(--foreground)",
-                background: "rgba(255,255,255,0.6)",
-              }}
-              onMouseEnter={e => {
-                (e.currentTarget as HTMLElement).style.borderColor = "var(--accent)";
-                (e.currentTarget as HTMLElement).style.color = "var(--accent)";
-              }}
-              onMouseLeave={e => {
-                (e.currentTarget as HTMLElement).style.borderColor = "var(--border)";
-                (e.currentTarget as HTMLElement).style.color = "var(--foreground)";
-              }}
-            >
-              Get in Touch
-            </a>
-          </motion.div>
-
-          {/* Availability badge */}
-          <motion.div
-            variants={fadeUp}
-            initial="hidden"
-            animate="show"
-            custom={0.55}
-            className="mt-10 flex items-center gap-2"
-          >
-            <span
-              className="w-2 h-2 rounded-full"
-              style={{ background: "#34a853", boxShadow: "0 0 0 3px rgba(52,168,83,0.2)" }}
-            />
-            <span className="text-xs" style={{ color: "var(--muted)" }}>
-              Actively looking for the right team
-            </span>
-          </motion.div>
-        </div>
-      </section>
-    );
-  }
+  useEffect(() => {
+    const timers = [
+      setTimeout(() => setPhase(1), 900),
+      setTimeout(() => setPhase(2), 1600),
+      setTimeout(() => setPhase(3), 2400),
+    ];
+    return () => timers.forEach(clearTimeout);
+  }, []);
 
   return (
     <section
-      className="coder-scanlines min-h-[100dvh] flex flex-col justify-center px-6 md:px-16 relative overflow-hidden"
-      style={{ background: "#0a0a0a", fontFamily: "var(--font-geist-mono), monospace" }}
+      className="content-layer min-h-[100dvh] flex flex-col justify-center px-4 md:px-8 lg:px-16 py-24"
+      style={{ background: "transparent" }}
     >
-      {/* Top metadata bar */}
-      <div
-        className="absolute top-0 left-0 right-0 flex items-center justify-between px-6 md:px-16 py-4 border-b"
-        style={{ borderColor: "#1a1a1a" }}
-      >
-        <span style={{ color: "#444", fontSize: "10px", letterSpacing: "0.12em" }}>
-          [ JUAN_AR ] // PORTFOLIO_v2.6
-        </span>
-        <span style={{ color: "#444", fontSize: "10px", letterSpacing: "0.12em" }}>
-          UNIT / D-01 · TANGERANG-SELATAN · ID
-        </span>
-      </div>
-
-      {/* Main content */}
-      <div className="w-full max-w-6xl mx-auto">
-        {/* Eyebrow */}
+      <div className="w-full max-w-4xl mx-auto">
+        {/* Terminal window chrome */}
         <motion.div
-          variants={fadeUp}
-          initial="hidden"
-          animate="show"
-          custom={0}
-          className="mb-6"
+          initial={{ opacity: 0, y: 16 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, ease: [0.32, 0.72, 0, 1] }}
+          className="term-panel overflow-hidden"
+          style={{ boxShadow: "0 4px 40px rgba(5,7,10,0.9)" }}
         >
-          <span
-            style={{
-              color: "#e61919",
-              fontSize: "10px",
-              letterSpacing: "0.18em",
-              textTransform: "uppercase",
-            }}
-          >
-            /// CODER_MODE · ACTIVE
-          </span>
-        </motion.div>
+          {/* Title bar */}
+          <div className="terminal-titlebar">
+            <div className="terminal-dot terminal-dot--close" />
+            <div className="terminal-dot terminal-dot--min" />
+            <div className="terminal-dot terminal-dot--max" />
+            <span className="terminal-title">deep-terminal — zsh</span>
+          </div>
 
-        {/* Macro headline */}
-        <motion.h1
-          variants={fadeUp}
-          initial="hidden"
-          animate="show"
-          custom={0.1}
-          style={{
-            fontSize: "clamp(4.5rem, 14vw, 11rem)",
-            fontWeight: 900,
-            lineHeight: 0.88,
-            letterSpacing: "-0.04em",
-            textTransform: "uppercase",
-            color: "#eaeaea",
-          }}
-        >
-          JUAN.
-          <br />
-          <span style={{ color: "#e61919" }}>RONALDI</span>
-        </motion.h1>
+          {/* Terminal body */}
+          <div className="p-6 md:p-8 space-y-1" style={{ minHeight: "420px" }}>
+            {/* Prompt 1 */}
+            <PromptLine cmd="whoami" delay={200} />
 
-        {/* Red divider */}
-        <motion.div
-          initial={{ scaleX: 0, opacity: 0 }}
-          animate={{ scaleX: 1, opacity: 1 }}
-          transition={{ duration: 0.9, delay: 0.3, ease: [0.32, 0.72, 0, 1] }}
-          style={{
-            height: "2px",
-            background: "#e61919",
-            transformOrigin: "left",
-            margin: "24px 0",
-          }}
-        />
+            {/* Output: Name + role */}
+            {phase >= 1 && (
+              <OutputLine delay={0} className="space-y-3 pt-2 pb-4">
+                <div>
+                  <div
+                    className="text-display-xl"
+                    style={{ letterSpacing: "-0.03em" }}
+                  >
+                    Juan A.{" "}
+                    <span style={{ color: "var(--blue-glow)" }}>Ronaldi</span>
+                    <span className="cursor-blink" style={{ marginLeft: "4px" }} />
+                  </div>
+                  <div
+                    className="text-label mt-2"
+                    style={{ color: "var(--text-dim)" }}
+                  >
+                    HR &amp; Operations · Tangerang Selatan · ID
+                  </div>
+                </div>
 
-        {/* Tagline */}
-        <motion.p
-          variants={fadeUp}
-          initial="hidden"
-          animate="show"
-          custom={0.35}
-          style={{
-            color: "#666",
-            fontSize: "12px",
-            letterSpacing: "0.08em",
-            textTransform: "uppercase",
-            maxWidth: "480px",
-            lineHeight: 1.7,
-          }}
-        >
-          HR professional / self-taught developer — building full-stack apps,
-          Android tools, and logistics systems that actually work.
-        </motion.p>
+                <p
+                  className="text-body"
+                  style={{ color: "var(--text-dim)", maxWidth: "560px" }}
+                >
+                  6+ tahun di HR dan operasional — dari event lapangan sampai
+                  remote company. Spesialisasi rekrutmen, people ops, dan
+                  membangun sistem yang benar-benar dipakai tim.
+                </p>
+              </OutputLine>
+            )}
 
-        {/* CTA row */}
-        <motion.div
-          variants={fadeUp}
-          initial="hidden"
-          animate="show"
-          custom={0.45}
-          className="mt-10 flex gap-4 flex-wrap items-center"
-        >
-          <a href="#projects" className="cta-coder">
-            SEE PROJECTS
-            <span style={{ color: "#e61919" }}>&gt;&gt;&gt;</span>
-          </a>
-          <a
-            href="https://github.com/jarondsss"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="cta-coder-ghost"
-          >
-            GITHUB ↗
-          </a>
-        </motion.div>
-
-        {/* Stats grid */}
-        <motion.div
-          variants={fadeUp}
-          initial="hidden"
-          animate="show"
-          custom={0.55}
-          className="mt-16 grid grid-cols-2 md:grid-cols-4"
-          style={{ border: "1px solid #1a1a1a" }}
-        >
-          {[
-            { label: "[ PROJECTS ]", value: "05" },
-            { label: "[ STACK ]", value: "12+" },
-            { label: "[ FOCUS ]", value: "FULLSTACK" },
-            { label: "[ STATUS ]", value: "OPEN" },
-          ].map((item, i) => (
-            <div
-              key={item.label}
-              className="p-5"
-              style={{
-                borderRight: i < 3 ? "1px solid #1a1a1a" : "none",
-                borderBottom: "none",
-              }}
-            >
-              <div style={{ color: "#444", fontSize: "9px", letterSpacing: "0.18em", marginBottom: "8px" }}>
-                {item.label}
+            {/* Prompt 2 */}
+            {phase >= 2 && (
+              <div className="pt-2">
+                <PromptLine cmd="cat status.log" delay={0} />
               </div>
-              <div
-                style={{
-                  color: item.label === "[ STATUS ]" ? "#4af626" : "#eaeaea",
-                  fontSize: "20px",
-                  fontWeight: 700,
-                  letterSpacing: "-0.02em",
-                }}
-              >
-                {item.value}
-              </div>
-            </div>
-          ))}
-        </motion.div>
+            )}
 
-        {/* Availability */}
-        <motion.div
-          variants={fadeUp}
-          initial="hidden"
-          animate="show"
-          custom={0.65}
-          className="mt-6 flex items-center gap-3"
-        >
-          <span
-            style={{
-              display: "inline-block",
-              width: "6px",
-              height: "6px",
-              background: "#4af626",
-              boxShadow: "0 0 8px #4af626",
-            }}
-          />
-          <span style={{ color: "#444", fontSize: "10px", letterSpacing: "0.12em", textTransform: "uppercase" }}>
-            Open to freelance, collab, and full-time remote
-          </span>
+            {/* Output: status */}
+            {phase >= 3 && (
+              <OutputLine delay={0.3} className="pt-1 pb-4">
+                <div className="flex flex-wrap gap-x-6 gap-y-2 text-meta">
+                  <span>
+                    <span style={{ color: "var(--text-ghost)" }}>status</span>
+                    <span style={{ color: "var(--text-dim)" }}> = </span>
+                    <span style={{ color: "var(--cyan-signal)" }}>
+                      ACTIVELY_LOOKING
+                    </span>
+                  </span>
+                  <span>
+                    <span style={{ color: "var(--text-ghost)" }}>mode</span>
+                    <span style={{ color: "var(--text-dim)" }}> = </span>
+                    <span style={{ color: "var(--blue-glow)" }}>
+                      &quot;open to the right team&quot;
+                    </span>
+                  </span>
+                  <span>
+                    <span style={{ color: "var(--text-ghost)" }}>remote</span>
+                    <span style={{ color: "var(--text-dim)" }}> = </span>
+                    <span style={{ color: "var(--text-primary)" }}>true</span>
+                  </span>
+                </div>
+
+                {/* CTA row */}
+                <div className="mt-8 flex flex-wrap gap-4 items-center">
+                  <a
+                    href="#experience"
+                    className="term-link inline-flex items-center gap-2 text-body"
+                    style={{
+                      border: "1px solid var(--line)",
+                      padding: "8px 20px",
+                      borderRadius: "2px",
+                      color: "var(--text-primary)",
+                      transition: "border-color 150ms, color 150ms",
+                    }}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.borderColor = "var(--blue-core)";
+                      e.currentTarget.style.color = "var(--blue-glow)";
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.borderColor = "var(--line)";
+                      e.currentTarget.style.color = "var(--text-primary)";
+                    }}
+                  >
+                    <span style={{ color: "var(--blue-glow)" }}>&gt;</span>
+                    {" "}cat experience.log
+                  </a>
+                  <a
+                    href="#contact"
+                    className="bracket-link"
+                    style={{ padding: "8px 0" }}
+                  >
+                    [ping contact]
+                  </a>
+                </div>
+              </OutputLine>
+            )}
+          </div>
         </motion.div>
       </div>
     </section>
   );
+}
+
+// ── Coder Hero ────────────────────────────────────────────
+function HeroCoder() {
+  const [phase, setPhase] = useState(0);
+
+  useEffect(() => {
+    setPhase(0);
+    const timers = [
+      setTimeout(() => setPhase(1), 700),
+      setTimeout(() => setPhase(2), 1400),
+      setTimeout(() => setPhase(3), 2200),
+      setTimeout(() => setPhase(4), 3000),
+    ];
+    return () => timers.forEach(clearTimeout);
+  }, []);
+
+  return (
+    <section
+      className="content-layer min-h-[100dvh] flex flex-col justify-center px-4 md:px-8 lg:px-16 py-24"
+      style={{ background: "transparent" }}
+    >
+      <div className="w-full max-w-4xl mx-auto">
+        <motion.div
+          initial={{ opacity: 0, y: 16 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, ease: [0.32, 0.72, 0, 1] }}
+          className="term-panel overflow-hidden"
+          style={{ boxShadow: "0 4px 40px rgba(5,7,10,0.8)" }}
+        >
+          {/* Title bar */}
+          <div className="terminal-titlebar">
+            <div className="terminal-dot terminal-dot--close" />
+            <div className="terminal-dot terminal-dot--min" />
+            <div className="terminal-dot terminal-dot--max" />
+            <span className="terminal-title">deep-terminal — zsh · CODER_MODE</span>
+          </div>
+
+          {/* Terminal body */}
+          <div className="p-6 md:p-8 space-y-1" style={{ minHeight: "480px" }}>
+            {/* Top metadata */}
+            <div
+              className="text-label mb-4"
+              style={{ color: "var(--text-ghost)", fontSize: "10px" }}
+            >
+              [ JUAN_AR ] // PORTFOLIO_v2.6 · TANGERANG-SELATAN · ID
+            </div>
+
+            {/* Prompt 1 */}
+            <PromptLine cmd="whoami --mode=coder" delay={100} />
+
+            {phase >= 1 && (
+              <OutputLine delay={0} className="pt-2 pb-3">
+                <div className="text-display-xl" style={{ letterSpacing: "-0.03em" }}>
+                  JUAN.
+                  <br />
+                  <span style={{ color: "var(--blue-glow)" }}>RONALDI</span>
+                  {phase < 2 && <span className="cursor-blink" />}
+                </div>
+                <div className="text-meta mt-3" style={{ color: "var(--text-dim)" }}>
+                  engineer. builds things that ship. debugs at 2am by choice.
+                </div>
+              </OutputLine>
+            )}
+
+            {phase >= 2 && (
+              <div className="pt-2">
+                <PromptLine cmd="cat stack.json | head -3" delay={0} />
+              </div>
+            )}
+
+            {phase >= 3 && (
+              <OutputLine delay={0.2} className="pt-1 pb-3">
+                <div
+                  className="term-panel p-4"
+                  style={{ fontSize: "12px", lineHeight: "1.8", maxWidth: "440px" }}
+                >
+                  <div>
+                    <span style={{ color: "var(--text-ghost)" }}>
+                      &quot;frontend&quot;
+                    </span>
+                    <span style={{ color: "var(--text-dim)" }}>: </span>
+                    <span style={{ color: "var(--blue-glow)" }}>
+                      [&quot;Next.js&quot;, &quot;TypeScript&quot;, &quot;Tailwind&quot;]
+                    </span>
+                    <span style={{ color: "var(--text-dim)" }}>,</span>
+                  </div>
+                  <div>
+                    <span style={{ color: "var(--text-ghost)" }}>
+                      &quot;backend&quot;
+                    </span>
+                    <span style={{ color: "var(--text-dim)" }}>: </span>
+                    <span style={{ color: "var(--blue-glow)" }}>
+                      [&quot;Prisma&quot;, &quot;Supabase&quot;, &quot;SQLite&quot;]
+                    </span>
+                    <span style={{ color: "var(--text-dim)" }}>,</span>
+                  </div>
+                  <div>
+                    <span style={{ color: "var(--text-ghost)" }}>
+                      &quot;mobile&quot;
+                    </span>
+                    <span style={{ color: "var(--text-dim)" }}>: </span>
+                    <span style={{ color: "var(--blue-glow)" }}>
+                      [&quot;Kotlin&quot;, &quot;Android&quot;, &quot;Capacitor&quot;]
+                    </span>
+                  </div>
+                </div>
+              </OutputLine>
+            )}
+
+            {phase >= 4 && (
+              <div className="pt-2">
+                <PromptLine cmd="ping contact" delay={0} />
+                <OutputLine delay={0.5} className="pt-2">
+                  <div className="flex flex-wrap gap-4 items-center text-meta">
+                    <span>
+                      <span style={{ color: "var(--text-dim)" }}>CONNECTING</span>
+                      <span className="loading-dots" style={{ color: "var(--cyan-signal)" }} />
+                    </span>
+                  </div>
+                  <div className="mt-6 flex flex-wrap gap-4">
+                    <a
+                      href="#projects"
+                      className="term-link inline-flex items-center gap-2"
+                      style={{
+                        border: "1px solid var(--blue-core)",
+                        padding: "8px 20px",
+                        borderRadius: "2px",
+                        color: "var(--blue-glow)",
+                        fontSize: "13px",
+                        letterSpacing: "0.06em",
+                      }}
+                    >
+                      cat projects.log
+                    </a>
+                    <a
+                      href="https://github.com/jarondsss"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="bracket-link"
+                      style={{ padding: "8px 0", fontSize: "12px" }}
+                    >
+                      [GH] github.com/jarondsss
+                    </a>
+                  </div>
+                </OutputLine>
+              </div>
+            )}
+          </div>
+        </motion.div>
+      </div>
+    </section>
+  );
+}
+
+export default function HeroSection() {
+  const { persona } = usePersona();
+  return persona === "hr" ? <HeroHR /> : <HeroCoder />;
 }
