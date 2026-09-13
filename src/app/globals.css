@@ -460,6 +460,127 @@ body {
 }
 
 /* ──────────────────────────────────────────────────────────
+   PARALLAX LAYERS / DEPTH HUD
+   Full parallax: transform-only, no layout thrash
+   ────────────────────────────────────────────────────────── */
+
+.parallax-layer {
+  will-change: transform;
+  transform: translateZ(0);
+}
+
+.ghost-layer {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  user-select: none;
+  z-index: 0;
+}
+
+.ghost-text {
+  font-size: clamp(4rem, 14vw, 11rem);
+  font-weight: 700;
+  letter-spacing: -0.04em;
+  line-height: 1;
+  white-space: nowrap;
+  color: var(--text-ghost);
+  opacity: 0.5;
+  padding: 24px 0;
+}
+
+.depth-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: var(--blue-core);
+  transform-origin: left;
+  z-index: 60;
+}
+
+.depth-hud {
+  position: fixed;
+  left: 18px;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 40;
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  pointer-events: none;
+}
+
+@media (min-width: 1024px) {
+  .depth-hud {
+    display: flex;
+  }
+}
+
+.depth-hud__value {
+  font-size: 10px;
+  letter-spacing: 0.12em;
+}
+
+.depth-hud__rail {
+  position: relative;
+  width: 1px;
+  height: 140px;
+  background: var(--line);
+  overflow: hidden;
+}
+
+.depth-hud__fill {
+  position: absolute;
+  inset: 0;
+  background: var(--blue-core);
+  transform-origin: top;
+}
+
+.depth-hud__sections {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  pointer-events: auto;
+}
+
+.depth-hud__dot {
+  display: block;
+  width: 5px;
+  height: 5px;
+  border-radius: 1px;
+  background: var(--text-ghost);
+  transition: background 150ms ease, box-shadow 150ms ease;
+}
+
+.depth-hud__dot--active {
+  background: var(--cyan-signal);
+  box-shadow: 0 0 6px var(--cyan-signal);
+}
+
+.depth-hud__label {
+  font-size: 9px;
+  letter-spacing: 0.22em;
+  color: var(--text-ghost);
+  writing-mode: vertical-rl;
+}
+
+/* Diving vignette — darkens with depth, driven inline via opacity */
+.dive-vignette {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background: radial-gradient(
+    ellipse at center,
+    transparent 45%,
+    rgba(2, 4, 6, 0.55) 100%
+  );
+}
+
+/* ──────────────────────────────────────────────────────────
    REDUCED MOTION
    ────────────────────────────────────────────────────────── */
 
@@ -479,5 +600,17 @@ body {
 
   #fish-canvas {
     display: none;
+  }
+
+  .parallax-layer,
+  .depth-hud,
+  .depth-progress,
+  .dive-vignette,
+  .ghost-layer {
+    transform: none !important;
+  }
+
+  .depth-hud {
+    display: none !important;
   }
 }

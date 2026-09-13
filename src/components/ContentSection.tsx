@@ -2,6 +2,8 @@
 
 import { motion, Variants } from "framer-motion";
 import { usePersona } from "@/context/PersonaContext";
+import ParallaxSection from "./ParallaxSection";
+import GhostLayer from "./GhostLayer";
 
 const fadeUp: Variants = {
   hidden: { opacity: 0, y: 12 },
@@ -101,9 +103,10 @@ function ExperienceSection() {
   return (
     <section
       id="experience"
-      className="content-layer section-void px-4 md:px-8 lg:px-16 py-28"
+      className="content-layer section-void px-4 md:px-8 lg:px-16 py-28 relative overflow-hidden"
     >
-      <div className="max-w-4xl mx-auto">
+      <GhostLayer text="EXPERIENCE" speed="slow" />
+      <div className="max-w-4xl mx-auto relative">
         {/* Section divider */}
         <div className="section-divider mb-12" />
 
@@ -118,7 +121,8 @@ function ExperienceSection() {
             <SectionPrompt cmd="cat experience.log" />
           </motion.div>
 
-          {/* Heading */}
+          {/* Heading — fastest layer */}
+          <ParallaxSection speed="fast">
           <motion.h2
             variants={fadeUp}
             className="text-display mb-10"
@@ -127,8 +131,10 @@ function ExperienceSection() {
             experience
             <span style={{ color: "var(--blue-glow)" }}>.log</span>
           </motion.h2>
+          </ParallaxSection>
 
-          {/* Experience log entries */}
+          {/* Experience log entries — normal layer */}
+          <ParallaxSection speed="normal">
           <motion.div variants={stagger} className="space-y-2">
             {hrExperience.map((exp, i) => (
               <motion.div
@@ -182,6 +188,7 @@ function ExperienceSection() {
               </motion.div>
             ))}
           </motion.div>
+          </ParallaxSection>
         </motion.div>
       </div>
     </section>
@@ -192,9 +199,10 @@ function ExperienceSection() {
 function SkillsSection() {
   return (
     <section
-      className="content-layer section-panel px-4 md:px-8 lg:px-16 py-24"
+      className="content-layer section-panel px-4 md:px-8 lg:px-16 py-24 relative overflow-hidden"
     >
-      <div className="max-w-4xl mx-auto">
+      <GhostLayer text="SKILLS" speed="reverse" />
+      <div className="max-w-4xl mx-auto relative">
         <div className="section-divider mb-12" />
 
         <motion.div
@@ -207,6 +215,7 @@ function SkillsSection() {
             <SectionPrompt cmd="ls -la skills/" />
           </motion.div>
 
+          <ParallaxSection speed="fast">
           <motion.h2
             variants={fadeUp}
             className="text-display mb-10"
@@ -214,7 +223,9 @@ function SkillsSection() {
             skills
             <span style={{ color: "var(--blue-glow)" }}>/</span>
           </motion.h2>
+          </ParallaxSection>
 
+          <ParallaxSection speed="normal">
           <motion.div
             variants={stagger}
             className="grid grid-cols-1 md:grid-cols-3 gap-3"
@@ -246,6 +257,7 @@ function SkillsSection() {
               </motion.div>
             ))}
           </motion.div>
+          </ParallaxSection>
         </motion.div>
       </div>
     </section>
@@ -256,9 +268,10 @@ function SkillsSection() {
 function EducationSection() {
   return (
     <section
-      className="content-layer section-void px-4 md:px-8 lg:px-16 py-24"
+      className="content-layer section-void px-4 md:px-8 lg:px-16 py-24 relative overflow-hidden"
     >
-      <div className="max-w-4xl mx-auto">
+      <GhostLayer text="EDUCATION" speed="slow" />
+      <div className="max-w-4xl mx-auto relative">
         <div className="section-divider mb-12" />
 
         <motion.div
@@ -271,6 +284,7 @@ function EducationSection() {
             <SectionPrompt cmd="cat education.log" />
           </motion.div>
 
+          <ParallaxSection speed="fast">
           <motion.h2
             variants={fadeUp}
             className="text-display mb-10"
@@ -278,7 +292,9 @@ function EducationSection() {
             education
             <span style={{ color: "var(--blue-glow)" }}>.log</span>
           </motion.h2>
+          </ParallaxSection>
 
+          <ParallaxSection speed="normal">
           <motion.div variants={stagger} className="space-y-2">
             {[
               {
@@ -336,6 +352,7 @@ function EducationSection() {
               </motion.div>
             ))}
           </motion.div>
+          </ParallaxSection>
         </motion.div>
       </div>
     </section>
@@ -347,9 +364,10 @@ function CoderSkillsSection() {
   return (
     <section
       id="skills"
-      className="content-layer section-void px-4 md:px-8 lg:px-16 py-28"
+      className="content-layer section-void px-4 md:px-8 lg:px-16 py-28 relative overflow-hidden"
     >
-      <div className="max-w-4xl mx-auto">
+      <GhostLayer text="STACK.JSON" speed="reverse" />
+      <div className="max-w-4xl mx-auto relative">
         <div className="section-divider mb-12" />
 
         <motion.div
@@ -362,6 +380,7 @@ function CoderSkillsSection() {
             <SectionPrompt cmd="cat stack.json" />
           </motion.div>
 
+          <ParallaxSection speed="fast">
           <motion.h2
             variants={fadeUp}
             className="text-display mb-10"
@@ -369,6 +388,7 @@ function CoderSkillsSection() {
             stack
             <span style={{ color: "var(--blue-glow)" }}>.json</span>
           </motion.h2>
+          </ParallaxSection>
 
           {/* Table header */}
           <div
@@ -385,7 +405,8 @@ function CoderSkillsSection() {
             <span style={{ width: "120px" }}>CATEGORY</span>
           </div>
 
-          {/* Stack rows */}
+          {/* Stack rows — normal layer */}
+          <ParallaxSection speed="normal">
           <motion.div variants={stagger}>
             {coderStack.map((item) => (
               <motion.div
@@ -431,6 +452,7 @@ function CoderSkillsSection() {
               </motion.div>
             ))}
           </motion.div>
+          </ParallaxSection>
         </motion.div>
       </div>
     </section>

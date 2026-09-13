@@ -213,6 +213,12 @@ export default function PixelFishCanvas() {
   const lastTimeRef = useRef(0);
   const rafRef = useRef<number>(0);
   const reducedMotion = useRef(false);
+  // ── Dive parallax state ──────────────────────────────────
+  // scrollTarget = latest window.scrollY, scrollSmooth lerps toward it each
+  // frame; the per-frame delta drives per-layer vertical parallax + speed boost.
+  const scrollTargetRef = useRef(0);
+  const scrollSmoothRef = useRef(0);
+  const scrollVelRef = useRef(0); // px/sec, smoothed
 
   useEffect(() => {
     reducedMotion.current = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -239,6 +245,14 @@ export default function PixelFishCanvas() {
       mouseRef.current = { x: e.clientX, y: e.clientY };
     };
     window.addEventListener("mousemove", onMouseMove);
+
+    // Scroll tracking for dive parallax (passive, transform-only consumption)
+    scrollTargetRef.current = window.scrollY;
+    scrollSmoothRef.current = window.scrollY;
+    const onScroll = () => {
+      scrollTargetRef.current = window.scrollY;
+    };
+    window.addEventListener("scroll", onScroll, { passive: true });
 
     // Initial fish population — 4 fish spread across viewport
     const w = canvas.width;
@@ -277,14 +291,32 @@ export default function PixelFishCanvas() {
       const mx = mouseRef.current.x;
       const my = mouseRef.current.y;
 
+      // ── Dive parallax: smooth scroll delta ───────────────
+      const prevSmooth = scrollSmoothRef.current;
+      const nextSmooth = prevSmooth + (scrollTargetRef.current - prevSmooth) * Math.min(dt * 8, 1);
+      const scrollDelta = nextSmooth - prevSmooth; // px this frame
+      scrollSmoothRef.current = nextSmooth;
+      const instVel = dt > 0 ? scrollDelta / dt : 0;
+      scrollVelRef.current += (instVel - scrollVelRef.current) * 0.12;
+      const speedBoost = 1 + Math.min(Math.abs(scrollVelRef.current) / 4000, 1.0);
+
+      const LAYER_PARALLAX = { back: 0.08, mid: 0.18, front: 0.32 } as const;
+      const wrapY = (y: number) => {
+        const margin = 60;
+        const span = ch + margin * 2;
+        return ((((y + margin) % span) + span) % span) - margin;
+      };
+
       // ── Update fish ──────────────────────────────────────
       const toRemove: number[] = [];
       for (let i = 0; i < fishRef.current.length; i++) {
         const fish = fishRef.current[i];
         const fw = fishWidth(fish);
 
-        // Move
-        fish.x += fish.dx * fish.speed * dt;
+        // Move (with scroll-velocity boost)
+        fish.x += fish.dx * fish.speed * speedBoost * dt;
+        // Vertical dive parallax — deeper layers drift less
+        fish.y = wrapY(fish.y - scrollDelta * LAYER_PARALLAX[fish.layer]);
 
         // Cursor avoidance
         const cx = fish.x + fw / 2;
@@ -322,9 +354,21 @@ export default function PixelFishCanvas() {
         fishRef.current.push(spawnFish(cw, ch, true));
       }
 
-      // Ensure 3–6 fish total
-      while (fishRef.current.length < 3) {
-        fishRef.current.push(spawnFish(cw, ch, true));
+      // Ensure 3–6 fish total — population grows as you dive deeper
+      const maxScroll = Math.max(
+        document.documentElement.scrollHeight - window.innerHeight,
+        1
+      );
+      const dive = Math.min(Math.max(scrollTargetRef.current / maxScroll, 0), 1);
+      const desired = dive > 0.66 ? 6 : dive > 0.33 ? 5 : 4;
+      let guard = 0;
+      while (fishRef.current.length < desired && guard++ < 4) {
+        const f = spawnFish(cw, ch, true);
+        // Boss fish more likely in the deep
+        if (dive > 0.5 && Math.random() < 0.15) {
+          f.type = "C";
+        }
+        fishRef.current.push(f);
       }
 
       sortFish();
@@ -393,6 +437,7 @@ export default function PixelFishCanvas() {
       cancelAnimationFrame(rafRef.current);
       window.removeEventListener("resize", resize);
       window.removeEventListener("mousemove", onMouseMove);
+      window.removeEventListener("scroll", onScroll);
     };
   }, []);
 

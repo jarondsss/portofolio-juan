@@ -1,8 +1,10 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { motion, useScroll, useTransform, useReducedMotion } from "framer-motion";
 import { useEffect, useState, useRef } from "react";
 import { usePersona } from "@/context/PersonaContext";
+import { useMouseParallax } from "@/hooks/useMouseParallax";
+import { useMounted } from "@/hooks/useMounted";
 
 // ── Typewriter hook ───────────────────────────────────────
 function useTypewriter(text: string, speed = 34, startDelay = 400) {
@@ -46,6 +48,26 @@ function PromptLine({ cmd, delay = 0 }: { cmd: string; delay?: number }) {
   );
 }
 
+// ── Hero dive parallax (scroll-out + mouse) ───────────────
+function useHeroDive() {
+  const ref = useRef<HTMLElement>(null);
+  const reduce = useReducedMotion();
+  const mounted = useMounted();
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const { scrollYProgress } = useScroll({ target: ref as any, offset: ["start start", "end start"] as any });
+  const termY = useTransform(scrollYProgress, [0, 1], [0, 120]);
+  const termOpacity = useTransform(scrollYProgress, [0, 1], [1, 0.2]);
+  const termScale = useTransform(scrollYProgress, [0, 1], [1, 0.96]);
+  const ghostY = useTransform(scrollYProgress, [0, 1], [0, -80]);
+  const { x: mx, y: my } = useMouseParallax(10);
+  const mouseTermX = useTransform(mx, (v) => (reduce ? 0 : v));
+  const mouseTermY = useTransform(my, (v) => (reduce ? 0 : v));
+  const mouseGhostX = useTransform(mx, (v) => (reduce ? 0 : v * 2));
+  // Gate motion styles behind mount so SSR HTML === first client render.
+  const motionReady = mounted && !reduce;
+  return { ref, reduce, termY, termOpacity, termScale, ghostY, mouseTermX, mouseTermY, mouseGhostX, motionReady };
+}
+
 // ── Fade in line after delay ──────────────────────────────
 function OutputLine({
   children,
@@ -71,6 +93,7 @@ function OutputLine({
 // ── HR Hero ───────────────────────────────────────────────
 function HeroHR() {
   const [phase, setPhase] = useState(0);
+  const { ref, termY, termOpacity, termScale, ghostY, mouseTermX, mouseTermY, mouseGhostX, motionReady } = useHeroDive();
 
   useEffect(() => {
     const timers = [
@@ -83,10 +106,27 @@ function HeroHR() {
 
   return (
     <section
-      className="content-layer min-h-[100dvh] flex flex-col justify-center px-4 md:px-8 lg:px-16 py-24"
+      ref={ref}
+      id="top"
+      className="content-layer min-h-[100dvh] flex flex-col justify-center px-4 md:px-8 lg:px-16 py-24 relative overflow-hidden"
       style={{ background: "transparent" }}
     >
-      <div className="w-full max-w-4xl mx-auto">
+      {/* Ghost watermark — slowest layer */}
+      <motion.div
+        aria-hidden="true"
+        style={motionReady ? { y: ghostY, x: mouseGhostX } : undefined}
+        className="ghost-layer"
+      >
+        <div className="ghost-text">WHOAMI</div>
+      </motion.div>
+      <motion.div
+        style={motionReady ? { y: termY, opacity: termOpacity, scale: termScale } : undefined}
+        className="w-full max-w-4xl mx-auto relative"
+      >
+      <motion.div
+        style={motionReady ? { x: mouseTermX, y: mouseTermY } : undefined}
+        className="parallax-layer"
+      >
         {/* Terminal window chrome */}
         <motion.div
           initial={{ opacity: 0, y: 16 }}
@@ -207,7 +247,8 @@ function HeroHR() {
             )}
           </div>
         </motion.div>
-      </div>
+      </motion.div>
+      </motion.div>
     </section>
   );
 }
@@ -215,6 +256,7 @@ function HeroHR() {
 // ── Coder Hero ────────────────────────────────────────────
 function HeroCoder() {
   const [phase, setPhase] = useState(0);
+  const { ref, termY, termOpacity, termScale, ghostY, mouseTermX, mouseTermY, mouseGhostX, motionReady } = useHeroDive();
 
   useEffect(() => {
     setPhase(0);
@@ -229,10 +271,27 @@ function HeroCoder() {
 
   return (
     <section
-      className="content-layer min-h-[100dvh] flex flex-col justify-center px-4 md:px-8 lg:px-16 py-24"
+      ref={ref}
+      id="top"
+      className="content-layer min-h-[100dvh] flex flex-col justify-center px-4 md:px-8 lg:px-16 py-24 relative overflow-hidden"
       style={{ background: "transparent" }}
     >
-      <div className="w-full max-w-4xl mx-auto">
+      {/* Ghost watermark — slowest layer */}
+      <motion.div
+        aria-hidden="true"
+        style={motionReady ? { y: ghostY, x: mouseGhostX } : undefined}
+        className="ghost-layer"
+      >
+        <div className="ghost-text">CODER_MODE</div>
+      </motion.div>
+      <motion.div
+        style={motionReady ? { y: termY, opacity: termOpacity, scale: termScale } : undefined}
+        className="w-full max-w-4xl mx-auto relative"
+      >
+      <motion.div
+        style={motionReady ? { x: mouseTermX, y: mouseTermY } : undefined}
+        className="parallax-layer"
+      >
         <motion.div
           initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
@@ -360,7 +419,8 @@ function HeroCoder() {
             )}
           </div>
         </motion.div>
-      </div>
+      </motion.div>
+      </motion.div>
     </section>
   );
 }

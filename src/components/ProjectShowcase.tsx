@@ -3,6 +3,8 @@
 import { motion, Variants } from "framer-motion";
 import { useState } from "react";
 import { usePersona } from "@/context/PersonaContext";
+import ParallaxSection from "./ParallaxSection";
+import GhostLayer from "./GhostLayer";
 
 const fadeUp: Variants = {
   hidden: { opacity: 0, y: 12 },
@@ -234,9 +236,10 @@ function HRProjectsView() {
   return (
     <section
       id="projects"
-      className="content-layer section-panel px-4 md:px-8 lg:px-16 py-28"
+      className="content-layer section-panel px-4 md:px-8 lg:px-16 py-28 relative overflow-hidden"
     >
-      <div className="max-w-4xl mx-auto">
+      <GhostLayer text="PROJECTS" speed="slow" />
+      <div className="max-w-4xl mx-auto relative">
         <div className="section-divider mb-12" />
         <motion.div
           variants={stagger}
@@ -247,10 +250,12 @@ function HRProjectsView() {
           <motion.div variants={fadeUp}>
             <SectionPrompt cmd="cat projects.log" />
           </motion.div>
+          <ParallaxSection speed="fast">
           <motion.h2 variants={fadeUp} className="text-display mb-2">
             projects
             <span style={{ color: "var(--blue-glow)" }}>.log</span>
           </motion.h2>
+          </ParallaxSection>
           <motion.p
             variants={fadeUp}
             className="text-meta mb-10"
@@ -259,9 +264,11 @@ function HRProjectsView() {
             Side work — self-taught full-stack dev membangun tools yang solve real problems.
           </motion.p>
 
+          <ParallaxSection speed="normal">
           {projects.map((p) => (
             <ProjectRow key={p.name} project={p} />
           ))}
+          </ParallaxSection>
         </motion.div>
       </div>
     </section>
@@ -273,9 +280,10 @@ function CoderProjectsView() {
   return (
     <section
       id="projects"
-      className="content-layer section-void px-4 md:px-8 lg:px-16 py-28"
+      className="content-layer section-void px-4 md:px-8 lg:px-16 py-28 relative overflow-hidden"
     >
-      <div className="max-w-4xl mx-auto">
+      <GhostLayer text="PROJECTS" speed="slow" />
+      <div className="max-w-4xl mx-auto relative">
         <div className="section-divider mb-12" />
         <motion.div
           variants={stagger}
@@ -286,14 +294,18 @@ function CoderProjectsView() {
           <motion.div variants={fadeUp}>
             <SectionPrompt cmd="cat projects.log" />
           </motion.div>
+          <ParallaxSection speed="fast">
           <motion.h2 variants={fadeUp} className="text-display mb-10">
             projects
             <span style={{ color: "var(--blue-glow)" }}>.log</span>
           </motion.h2>
+          </ParallaxSection>
 
+          <ParallaxSection speed="normal">
           {projects.map((p) => (
             <ProjectRow key={p.name} project={p} />
           ))}
+          </ParallaxSection>
         </motion.div>
       </div>
     </section>

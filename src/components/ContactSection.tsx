@@ -3,6 +3,8 @@
 import { motion, Variants } from "framer-motion";
 import { useEffect, useState } from "react";
 import { usePersona } from "@/context/PersonaContext";
+import ParallaxSection from "./ParallaxSection";
+import GhostLayer from "./GhostLayer";
 
 const fadeUp: Variants = {
   hidden: { opacity: 0, y: 12 },
@@ -114,9 +116,10 @@ function ContactHR() {
   return (
     <section
       id="contact"
-      className="content-layer section-panel px-4 md:px-8 lg:px-16 py-28"
+      className="content-layer section-panel px-4 md:px-8 lg:px-16 py-28 relative overflow-hidden"
     >
-      <div className="max-w-4xl mx-auto">
+      <GhostLayer text="CONTACT" speed="reverse" />
+      <div className="max-w-4xl mx-auto relative">
         <div className="section-divider mb-12" />
 
         <motion.div
@@ -129,11 +132,14 @@ function ContactHR() {
             <SectionPrompt cmd="ping contact" />
           </motion.div>
 
+          <ParallaxSection speed="fast">
           <motion.h2 variants={fadeUp} className="text-display mb-3">
             contact
             <span style={{ color: "var(--blue-glow)" }}>/</span>
           </motion.h2>
+          </ParallaxSection>
 
+          <ParallaxSection speed="normal">
           <motion.p
             variants={fadeUp}
             className="text-body mb-10"
@@ -141,8 +147,10 @@ function ContactHR() {
           >
             Terbuka untuk posisi HR, konsultasi operasional, dan kolaborasi yang berdampak nyata.
           </motion.p>
+          </ParallaxSection>
 
           {/* Contact entries */}
+          <ParallaxSection speed="normal">
           <motion.div variants={stagger} className="space-y-2 mb-10">
             {contactLinks.map((link) => (
               <motion.a
@@ -197,6 +205,7 @@ function ContactHR() {
               </motion.a>
             ))}
           </motion.div>
+          </ParallaxSection>
 
           {/* Footer metadata */}
           <motion.div
@@ -243,9 +252,10 @@ function ContactCoder() {
   return (
     <section
       id="contact"
-      className="content-layer section-void px-4 md:px-8 lg:px-16 py-28"
+      className="content-layer section-void px-4 md:px-8 lg:px-16 py-28 relative overflow-hidden"
     >
-      <div className="max-w-4xl mx-auto">
+      <GhostLayer text="CONNECT" speed="reverse" />
+      <div className="max-w-4xl mx-auto relative">
         <div className="section-divider mb-12" />
 
         <motion.div
@@ -287,12 +297,15 @@ function ContactCoder() {
               animate={{ opacity: 1 }}
               transition={{ duration: 0.4 }}
             >
+              <ParallaxSection speed="fast">
               <motion.h2 variants={fadeUp} className="text-display mb-10">
                 connect
                 <span style={{ color: "var(--blue-glow)" }}>/</span>
               </motion.h2>
+              </ParallaxSection>
 
               {/* Contact table */}
+              <ParallaxSection speed="normal">
               <div
                 className="flex items-center gap-6 py-2 mb-1"
                 style={{
@@ -377,6 +390,7 @@ function ContactCoder() {
               >
                 [ EOF ] // JUAN_AR PORTFOLIO_v2.6 · {new Date().getFullYear()}
               </div>
+              </ParallaxSection>
             </motion.div>
           )}
         </motion.div>
